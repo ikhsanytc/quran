@@ -15,6 +15,9 @@ import {
 import { useColorScheme } from "react-native";
 import { useTheme } from "../hooks/useTheme";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import * as SystemUI from "expo-system-ui";
+import { AuthProvider } from "../providers/AuthProviders";
 
 const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
 const customLightTheme = { ...MD3LightTheme, colors: Colors.light };
@@ -28,21 +31,26 @@ const CombinedDarkTheme = merge(DarkTheme, customDarkTheme);
 const CombinedLightTheme = merge(LightTheme, customLightTheme);
 
 export default function RootLayout() {
-  const { colorScheme } = useTheme();
+  const colorScheme = useColorScheme();
   const paperTheme =
     colorScheme === "dark" ? CombinedDarkTheme : CombinedLightTheme;
+  useEffect(() => {
+    SystemUI.setBackgroundColorAsync(paperTheme.colors.background);
+  }, [paperTheme]);
   return (
     <PaperProvider theme={paperTheme}>
-      <ThemeProvider theme={paperTheme}>
+      <AuthProvider>
         <Stack
           screenOptions={{
             headerShown: false,
           }}
         >
           <Stack.Screen name="index" />
+          <Stack.Screen name="surat/[id]" />
+          <Stack.Screen name="(auth)/login" />
         </Stack>
         <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-      </ThemeProvider>
+      </AuthProvider>
     </PaperProvider>
   );
 }

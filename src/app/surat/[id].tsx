@@ -1,12 +1,13 @@
-import { FlatList, ScrollView, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { ScrollView, View } from "react-native";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ActivityIndicator,
   Appbar,
   Divider,
   List,
+  Modal,
+  Portal,
   Surface,
   Text,
   useTheme,
@@ -14,16 +15,19 @@ import {
 import { SuratData } from "@/src/types/surat";
 import { useFonts } from "expo-font";
 import { Amiri_400Regular, Amiri_700Bold } from "@expo-google-fonts/amiri";
-import * as Clipboard from "expo-clipboard";
+import { FlashList } from "@shopify/flash-list";
 
-export default function SuratDetail() {
+const SuratDetail = memo(() => {
   const { id } = useLocalSearchParams();
   const { colors } = useTheme();
+  const scrollViewRef = useRef<ScrollView>(null);
   const [surat, setSurat] = useState<SuratData>();
+  const [isLoading, setIsLoading] = useState(true);
   const [fontsLoaded] = useFonts({
     Amiri_Regular: Amiri_400Regular,
     Amiri_Bold: Amiri_700Bold,
   });
+
   async function init() {
     const res = await fetch(`https://equran.id/api/v2/surat/${id}`);
     const { data }: { data: SuratData } = await res.json();
@@ -32,6 +36,7 @@ export default function SuratDetail() {
   useEffect(() => {
     init();
   }, []);
+
   if (!surat) {
     return <RenderLoading />;
   }
@@ -40,6 +45,23 @@ export default function SuratDetail() {
   }
   return (
     <>
+      <Portal>
+        <Modal visible={isLoading}>
+          <View>
+            <ActivityIndicator size={50} />
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 28,
+                fontWeight: "bold",
+                marginTop: 10,
+              }}
+            >
+              Please wait...
+            </Text>
+          </View>
+        </Modal>
+      </Portal>
       <Appbar.Header
         style={{
           backgroundColor: colors.elevation.level4,
@@ -59,6 +81,7 @@ export default function SuratDetail() {
           flex: 1,
           backgroundColor: colors.background,
         }}
+        ref={scrollViewRef}
       >
         <View
           style={{
@@ -89,10 +112,16 @@ export default function SuratDetail() {
             </Text>
             <Text
               style={{
+                color: "gray",
+              }}
+            >
+              {surat.jumlahAyat} Ayat
+            </Text>
+            <Text
+              style={{
                 textAlign: "center",
                 fontWeight: 600,
                 fontSize: 26,
-                color: colors.primary,
                 fontFamily: "Amiri_Regular",
               }}
             >
@@ -112,7 +141,6 @@ export default function SuratDetail() {
                 textAlign: "center",
                 fontWeight: 600,
                 fontSize: 26,
-                color: colors.tertiary,
                 fontFamily: "Amiri_Regular",
               }}
             >
@@ -125,11 +153,17 @@ export default function SuratDetail() {
             marginTop: 10,
           }}
         >
-          <FlatList
+          <FlashList
             data={surat.ayat}
-            style={{
-              marginBottom: 10,
+            estimatedItemSize={100}
+            ListEmptyComponent={() => <Text>Wait..</Text>}
+            keyExtractor={(item) => item.nomorAyat.toString()}
+            removeClippedSubviews={true}
+            onLoad={() => setIsLoading(false)}
+            contentContainerStyle={{
+              paddingBottom: 10,
             }}
+            scrollEnabled={false}
             ItemSeparatorComponent={() => (
               <View
                 style={{
@@ -137,8 +171,7 @@ export default function SuratDetail() {
                 }}
               ></View>
             )}
-            scrollEnabled={false}
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <List.Item
                 descriptionStyle={{
                   marginBottom: 40,
@@ -178,7 +211,7 @@ export default function SuratDetail() {
                         fontSize: 18,
                       }}
                     >
-                      {++index}
+                      {item.nomorAyat}
                     </Text>
                   </View>
                 )}
@@ -211,7 +244,7 @@ export default function SuratDetail() {
       </ScrollView>
     </>
   );
-}
+});
 
 function RenderLoading() {
   const { colors } = useTheme();
@@ -243,3 +276,4 @@ function RenderLoading() {
     </>
   );
 }
+export default SuratDetail;
