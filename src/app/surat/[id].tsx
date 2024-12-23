@@ -1,9 +1,11 @@
-import { ScrollView, View } from "react-native";
+import { BackHandler, ScrollView, View } from "react-native";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
   Appbar,
+  Button,
+  Dialog,
   Divider,
   List,
   Modal,
@@ -16,6 +18,9 @@ import { SuratData } from "@/src/types/surat";
 import { useFonts } from "expo-font";
 import { Amiri_400Regular, Amiri_700Bold } from "@expo-google-fonts/amiri";
 import { FlashList } from "@shopify/flash-list";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import RenderDropdownMenuSurat from "@/src/components/render-dropdown-surat";
 
 const SuratDetail = memo(() => {
   const { id } = useLocalSearchParams();
@@ -23,10 +28,26 @@ const SuratDetail = memo(() => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [surat, setSurat] = useState<SuratData>();
   const [isLoading, setIsLoading] = useState(true);
+  const [isDialogBackShown, setIsDialogBackShown] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const [fontsLoaded] = useFonts({
     Amiri_Regular: Amiri_400Regular,
     Amiri_Bold: Amiri_700Bold,
   });
+  async function handleGetConditionScroll() {
+    try {
+      const data = await AsyncStorage.getItem(`scroll-${id}`);
+      if (!data) return 0;
+      return Number(data);
+    } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Unexpected error occured",
+      });
+      return 0;
+    }
+  }
 
   async function init() {
     const res = await fetch(`https://equran.id/api/v2/surat/${id}`);
@@ -35,7 +56,52 @@ const SuratDetail = memo(() => {
   }
   useEffect(() => {
     init();
+    const backAction = () => {
+      setIsDialogBackShown(true);
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => {
+      backHandler.remove();
+    };
   }, []);
+  useEffect(() => {
+    if (!isLoading) {
+      handleGetConditionScroll().then((res) => {
+        if (res && scrollViewRef.current) {
+          scrollViewRef.current.scrollTo({ y: res, animated: true });
+          Toast.show({
+            type: "info",
+            text1: "Info",
+            text2: "Scroll position restored",
+          });
+        }
+      });
+    }
+  }, [isLoading]);
+
+  async function handleSaveConditionScroll() {
+    try {
+      await AsyncStorage.setItem(`scroll-${id}`, scrollY.toString());
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Successfully saved",
+      });
+      setIsDialogBackShown(false);
+      router.back();
+    } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Unexpected error occured",
+      });
+    }
+    setIsDialogBackShown(false);
+  }
 
   if (!surat) {
     return <RenderLoading />;
@@ -61,13 +127,33 @@ const SuratDetail = memo(() => {
             </Text>
           </View>
         </Modal>
+        <Dialog
+          visible={isDialogBackShown}
+          onDismiss={() => setIsDialogBackShown(false)}
+        >
+          <Dialog.Title>Ingin simpan?</Dialog.Title>
+          <Dialog.Content>
+            <Text>Kamu ingin simpan kondisi sekarang?</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              onPress={() => {
+                setIsDialogBackShown(false);
+                router.back();
+              }}
+            >
+              No
+            </Button>
+            <Button onPress={handleSaveConditionScroll}>Yes</Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
       <Appbar.Header
         style={{
           backgroundColor: colors.elevation.level4,
         }}
       >
-        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.BackAction onPress={() => setIsDialogBackShown(true)} />
         <Appbar.Content
           title={`Surat ${surat.namaLatin}`}
           titleStyle={{
@@ -75,11 +161,15 @@ const SuratDetail = memo(() => {
             fontSize: 28,
           }}
         />
+        <RenderDropdownMenuSurat id={Number(id)} />
       </Appbar.Header>
       <ScrollView
         style={{
           flex: 1,
           backgroundColor: colors.background,
+        }}
+        onScroll={(e) => {
+          setScrollY(Math.floor(e.nativeEvent.contentOffset.y));
         }}
         ref={scrollViewRef}
       >

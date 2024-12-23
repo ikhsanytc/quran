@@ -5,7 +5,6 @@ import {
   MD3DarkTheme,
   MD3LightTheme,
   PaperProvider,
-  ThemeProvider,
 } from "react-native-paper";
 import { Colors } from "../constants/Color";
 import {
@@ -13,11 +12,10 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
 import { useColorScheme } from "react-native";
-import { useTheme } from "../hooks/useTheme";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import * as SystemUI from "expo-system-ui";
-import { AuthProvider } from "../providers/AuthProviders";
+import Toast from "react-native-toast-message";
 
 const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
 const customLightTheme = { ...MD3LightTheme, colors: Colors.light };
@@ -39,18 +37,16 @@ export default function RootLayout() {
   }, [paperTheme]);
   return (
     <PaperProvider theme={paperTheme}>
-      <AuthProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="surat/[id]" />
-          <Stack.Screen name="(auth)/login" />
-        </Stack>
-        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-      </AuthProvider>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="surat/[id]" />
+      </Stack>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+      <Toast />
     </PaperProvider>
   );
 }
