@@ -99,7 +99,6 @@ const Home = memo(() => {
         <FlashList
           data={quran}
           ref={FlashListRef}
-          removeClippedSubviews={true}
           keyExtractor={(item) => item.nomor.toString()}
           estimatedItemSize={78}
           onScroll={handleOnScroll}

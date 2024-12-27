@@ -1,6 +1,6 @@
 export type AsmaulHusnaType = {
-  no: number;
-  nama: string;
-  namaLatin: string;
+  urutan: number;
+  latin: string;
+  arab: string;
   arti: string;
 };

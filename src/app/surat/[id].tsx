@@ -1,5 +1,5 @@
 import { BackHandler, ScrollView, View } from "react-native";
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { FC, memo, useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
@@ -336,7 +336,11 @@ const SuratDetail = memo(() => {
   );
 });
 
-function RenderLoading() {
+type RenderLoadingType = {
+  title?: string;
+};
+
+export const RenderLoading: FC<RenderLoadingType> = ({ title = "Quran" }) => {
   const { colors } = useTheme();
   return (
     <>
@@ -346,7 +350,7 @@ function RenderLoading() {
         }}
       >
         <Appbar.Content
-          title="Quran"
+          title={title}
           titleStyle={{
             fontWeight: "700",
             fontSize: 28,
@@ -365,5 +369,5 @@ function RenderLoading() {
       </View>
     </>
   );
-}
+};
 export default SuratDetail;
