@@ -25,6 +25,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#2A3222"
       },
+      "softwareKeyboardLayoutMode": "pan",
       "package": "com.ikhsanytc.quran",
       "versionCode": 2
     },

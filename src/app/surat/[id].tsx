@@ -14,18 +14,22 @@ import {
   Text,
   useTheme,
 } from "react-native-paper";
-import { SuratData } from "@/src/types/surat";
+import { Ayat, SuratData } from "@/src/types/surat";
 import { useFonts } from "expo-font";
 import { Amiri_400Regular, Amiri_700Bold } from "@expo-google-fonts/amiri";
 import { FlashList } from "@shopify/flash-list";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RenderDropdownMenuSurat from "@/src/components/render-dropdown-surat";
+import RenderItemSurat from "@/src/components/render-item-surat-id";
+import { Audio } from "expo-av";
 
-const SuratDetail = memo(() => {
+export const soundSurat = Audio.Sound;
+
+const SuratDetail = () => {
   const { id } = useLocalSearchParams();
   const { colors } = useTheme();
-  const scrollViewRef = useRef<ScrollView>(null);
+  const FlashListRef = useRef<FlashList<Ayat>>(null);
   const [surat, setSurat] = useState<SuratData>();
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogBackShown, setIsDialogBackShown] = useState(false);
@@ -71,8 +75,11 @@ const SuratDetail = memo(() => {
   useEffect(() => {
     if (!isLoading) {
       handleGetConditionScroll().then((res) => {
-        if (res && scrollViewRef.current) {
-          scrollViewRef.current.scrollTo({ y: res, animated: true });
+        if (res && FlashListRef.current) {
+          FlashListRef.current.scrollToOffset({
+            offset: res,
+            animated: true,
+          });
           Toast.show({
             type: "info",
             text1: "Info",
@@ -163,97 +170,33 @@ const SuratDetail = memo(() => {
         />
         <RenderDropdownMenuSurat id={Number(id)} />
       </Appbar.Header>
-      <ScrollView
+      <View
         style={{
           flex: 1,
           backgroundColor: colors.background,
         }}
-        onScroll={(e) => {
-          setScrollY(Math.floor(e.nativeEvent.contentOffset.y));
-        }}
-        ref={scrollViewRef}
       >
         <View
           style={{
-            alignItems: "center",
             marginTop: 10,
-            marginHorizontal: 40,
-          }}
-        >
-          <Surface
-            elevation={4}
-            style={{
-              height: 200,
-              padding: 10,
-              width: "100%",
-              borderRadius: 20,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                fontWeight: "800",
-                fontSize: 28,
-              }}
-            >
-              {surat.namaLatin}
-            </Text>
-            <Text
-              style={{
-                color: "gray",
-              }}
-            >
-              {surat.jumlahAyat} Ayat
-            </Text>
-            <Text
-              style={{
-                textAlign: "center",
-                fontWeight: 600,
-                fontSize: 26,
-                fontFamily: "Amiri_Regular",
-              }}
-            >
-              {surat.nama}
-            </Text>
-            <View
-              style={{
-                height: 3,
-                width: 50,
-                backgroundColor: "white",
-                marginTop: 8,
-                marginBottom: 8,
-              }}
-            ></View>
-            <Text
-              style={{
-                textAlign: "center",
-                fontWeight: 600,
-                fontSize: 26,
-                fontFamily: "Amiri_Regular",
-              }}
-            >
-              بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
-            </Text>
-          </Surface>
-        </View>
-        <View
-          style={{
-            marginTop: 10,
+            flex: 1,
           }}
         >
           <FlashList
             data={surat.ayat}
-            estimatedItemSize={100}
             ListEmptyComponent={() => <Text>Wait..</Text>}
             keyExtractor={(item) => item.nomorAyat.toString()}
-            removeClippedSubviews={true}
+            // removeClippedSubviews={true}
+            estimatedItemSize={150}
+            ref={FlashListRef}
             onLoad={() => setIsLoading(false)}
             contentContainerStyle={{
               paddingBottom: 10,
             }}
-            scrollEnabled={false}
+            onScroll={(e) =>
+              setScrollY(Math.floor(e.nativeEvent.contentOffset.y))
+            }
+            scrollEnabled={true}
             ItemSeparatorComponent={() => (
               <View
                 style={{
@@ -261,80 +204,88 @@ const SuratDetail = memo(() => {
                 }}
               ></View>
             )}
-            renderItem={({ item }) => (
-              <List.Item
-                descriptionStyle={{
-                  marginBottom: 40,
-                }}
-                title={
-                  <Text
-                    style={{
-                      textAlign: "right",
-                      fontSize: 28,
-                      fontFamily: "Amiri_Regular",
-                      fontWeight: "600",
-                      lineHeight: 75,
-                    }}
-                  >
-                    {item.teksArab}
-                  </Text>
-                }
-                titleStyle={{
-                  marginBottom: 10,
-                }}
-                titleNumberOfLines={0}
-                left={() => (
-                  <View
-                    style={{
-                      marginLeft: 10,
-                      width: 30,
-                      height: 30,
-                      backgroundColor: colors.primary,
-                      borderRadius: 100,
-                    }}
-                  >
-                    <Text
+            renderItem={({ item }) => {
+              if (item.nomorAyat === 1) {
+                return (
+                  <>
+                    <View
                       style={{
-                        textAlign: "center",
-                        marginVertical: "auto",
-                        fontWeight: "800",
-                        fontSize: 18,
+                        alignItems: "center",
+                        marginTop: 10,
+                        marginHorizontal: 40,
+                        marginBottom: 20,
                       }}
                     >
-                      {item.nomorAyat}
-                    </Text>
-                  </View>
-                )}
-                description={
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontWeight: "700",
-                        marginBottom: 5,
-                      }}
-                    >
-                      {item.teksLatin}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 17,
-                        color: "gray",
-                        fontWeight: "600",
-                      }}
-                    >
-                      {item.teksIndonesia}
-                    </Text>
-                  </View>
-                }
-              />
-            )}
+                      <Surface
+                        elevation={4}
+                        style={{
+                          height: 200,
+                          padding: 10,
+                          width: "100%",
+                          borderRadius: 20,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            textAlign: "center",
+                            fontWeight: "800",
+                            fontSize: 28,
+                          }}
+                        >
+                          {surat.namaLatin}
+                        </Text>
+                        <Text
+                          style={{
+                            color: "gray",
+                          }}
+                        >
+                          {surat.jumlahAyat} Ayat
+                        </Text>
+                        <Text
+                          style={{
+                            textAlign: "center",
+                            fontWeight: 600,
+                            fontSize: 26,
+                            fontFamily: "Amiri_Regular",
+                          }}
+                        >
+                          {surat.nama}
+                        </Text>
+                        <View
+                          style={{
+                            height: 3,
+                            width: 50,
+                            backgroundColor: "white",
+                            marginTop: 8,
+                            marginBottom: 8,
+                          }}
+                        ></View>
+                        <Text
+                          style={{
+                            textAlign: "center",
+                            fontWeight: 600,
+                            fontSize: 26,
+                            fontFamily: "Amiri_Regular",
+                          }}
+                        >
+                          بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+                        </Text>
+                      </Surface>
+                    </View>
+                    <RenderItemSurat item={item} />
+                  </>
+                );
+              }
+              return <RenderItemSurat item={item} />;
+            }}
           />
         </View>
-      </ScrollView>
+      </View>
     </>
   );
-});
+};
 
 type RenderLoadingType = {
   title?: string;

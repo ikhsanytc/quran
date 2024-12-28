@@ -11,7 +11,7 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
-import { useColorScheme } from "react-native";
+import { KeyboardAvoidingView, Platform, useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import * as SystemUI from "expo-system-ui";
@@ -37,23 +37,29 @@ export default function RootLayout() {
     SystemUI.setBackgroundColorAsync(paperTheme.colors.background);
   }, [paperTheme]);
   return (
-    <GestureHandlerRootView
+    <KeyboardAvoidingView
       style={{
         flex: 1,
       }}
     >
-      <PaperProvider theme={paperTheme}>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="surat/[id]" />
-        </Stack>
-        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-        <Toast />
-      </PaperProvider>
-    </GestureHandlerRootView>
+      <GestureHandlerRootView
+        style={{
+          flex: 1,
+        }}
+      >
+        <PaperProvider theme={paperTheme}>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="surat/[id]" />
+          </Stack>
+          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+          <Toast />
+        </PaperProvider>
+      </GestureHandlerRootView>
+    </KeyboardAvoidingView>
   );
 }

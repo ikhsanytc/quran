@@ -19,6 +19,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { AsmaulHusnaType } from "@/src/types/asmaul-husna";
+import { handleOnScrollYFAB } from "@/src/lib/utils";
 
 const AsmaulHusna = memo(() => {
   const { colors } = useTheme();
@@ -35,24 +36,7 @@ const AsmaulHusna = memo(() => {
       transform: [{ translateY: translateYFAB.value }],
     };
   });
-  const handleOnScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const damping = 10;
-    const stiffness = 80;
-    const mass = 1;
-    if (e.nativeEvent.contentOffset.y > 0) {
-      translateYFAB.value = withSpring(0, {
-        damping,
-        stiffness,
-        mass,
-      });
-    } else {
-      translateYFAB.value = withSpring(300, {
-        damping,
-        stiffness,
-        mass,
-      });
-    }
-  };
+
   if (!fontsLoaded) {
     return <RenderLoading title="Asmaul Husna" />;
   }
@@ -85,7 +69,7 @@ const AsmaulHusna = memo(() => {
           keyExtractor={(item) => item.urutan.toString()}
           removeClippedSubviews={true}
           ref={FlashListRef}
-          onScroll={handleOnScroll}
+          onScroll={(e) => handleOnScrollYFAB(e, translateYFAB)}
           contentContainerStyle={{
             paddingBottom: 10,
           }}

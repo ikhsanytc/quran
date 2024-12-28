@@ -1,14 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import {
-  Appbar,
-  Button,
-  Dialog,
-  Menu,
-  Portal,
-  Text,
-  useTheme,
-} from "react-native-paper";
+import { Appbar, Button, Dialog, Menu, Portal, Text } from "react-native-paper";
 
 export default function RenderDropdownMenu() {
   const [visible, setVisible] = useState(false);
