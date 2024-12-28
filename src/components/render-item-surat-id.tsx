@@ -28,7 +28,7 @@ const RenderItemSurat: FC<RenderItemSuratProps> = ({
     } else {
       const { sound } = await soundSurat.createAsync(
         {
-          uri: item.audio["01"],
+          uri: item.audio["02"],
         },
         {},
         (status) => {
