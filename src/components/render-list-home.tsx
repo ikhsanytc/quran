@@ -6,6 +6,11 @@ import { Divider, List, Searchbar, Text, useTheme } from "react-native-paper";
 import { router } from "expo-router";
 import { removeHtmlTags } from "../lib/utils";
 import { View } from "react-native";
+import { useFonts } from "expo-font";
+import {
+  Poppins_400Regular,
+  Poppins_700Bold,
+} from "@expo-google-fonts/poppins";
 
 type RenderListHomeProps = {
   quran: isiQuranType[];
@@ -39,88 +44,69 @@ const RenderListHome: FC<RenderListHomeProps> = ({
                 }}
                 placeholder="Search surat..."
               />
-              <List.Item
-                title={item.namaLatin}
-                description={removeHtmlTags(item.deskripsi)}
-                onPress={() => router.push(`/surat/${item.nomor}`)}
-                left={() => (
-                  <View
-                    style={{
-                      marginVertical: "auto",
-                      marginLeft: 10,
-                      width: 40,
-                      height: 40,
-                      backgroundColor: colors.primary,
-                      borderRadius: 100,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        textAlign: "center",
-                        marginVertical: "auto",
-                        fontWeight: "800",
-                        fontSize: 18,
-                      }}
-                    >
-                      {item.nomor}
-                    </Text>
-                  </View>
-                )}
-                right={() => (
-                  <Text
-                    style={{
-                      color: colors.primary,
-                    }}
-                  >
-                    {item.nama}
-                  </Text>
-                )}
-              />
+              <RenderListItem item={item} />
             </>
           );
         }
-        return (
-          <List.Item
-            title={item.namaLatin}
-            description={removeHtmlTags(item.deskripsi)}
-            onPress={() => router.push(`/surat/${item.nomor}`)}
-            left={() => (
-              <View
-                style={{
-                  marginVertical: "auto",
-                  marginLeft: 10,
-                  width: 40,
-                  height: 40,
-                  backgroundColor: colors.primary,
-                  borderRadius: 100,
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    marginVertical: "auto",
-                    fontWeight: "800",
-                    fontSize: 18,
-                  }}
-                >
-                  {item.nomor}
-                </Text>
-              </View>
-            )}
-            right={() => (
-              <Text
-                style={{
-                  color: colors.primary,
-                }}
-              >
-                {item.nama}
-              </Text>
-            )}
-          />
-        );
+        return <RenderListItem item={item} />;
       }}
       ItemSeparatorComponent={() => <Divider />}
     />
+  );
+};
+
+type RenderListItemProps = {
+  item: isiQuranType;
+};
+
+const RenderListItem: FC<RenderListItemProps> = ({ item }) => {
+  const { colors } = useTheme();
+  return (
+    <>
+      <List.Item
+        title={item.namaLatin}
+        titleStyle={{
+          fontFamily: "Poppins_Bold",
+        }}
+        description={removeHtmlTags(item.deskripsi)}
+        descriptionStyle={{
+          fontFamily: "Poppins_Regular",
+        }}
+        onPress={() => router.push(`/surat/${item.nomor}`)}
+        left={() => (
+          <View
+            style={{
+              marginVertical: "auto",
+              marginLeft: 10,
+              width: 40,
+              height: 40,
+              backgroundColor: colors.primary,
+              borderRadius: 100,
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                marginVertical: "auto",
+                fontSize: 18,
+                fontFamily: "Poppins_Bold",
+              }}
+            >
+              {item.nomor}
+            </Text>
+          </View>
+        )}
+        right={() => (
+          <Text
+            style={{
+              color: colors.primary,
+            }}
+          >
+            {item.nama}
+          </Text>
+        )}
+      />
+    </>
   );
 };
 export default RenderListHome;

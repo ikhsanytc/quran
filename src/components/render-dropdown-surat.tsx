@@ -63,6 +63,9 @@ const RenderDropdownMenuSurat: FC<Props> = ({ id }) => {
           }
         >
           <Menu.Item
+            titleStyle={{
+              fontFamily: "Poppins_Regular",
+            }}
             title="Menghapus kondisi sebelumnya"
             onPress={handleDeleteConditionState}
           />

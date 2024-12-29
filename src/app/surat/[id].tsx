@@ -23,6 +23,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import RenderDropdownMenuSurat from "@/src/components/render-dropdown-surat";
 import RenderItemSurat from "@/src/components/render-item-surat-id";
 import { Audio } from "expo-av";
+import { RenderLoading } from "@/src/components/render-loading-global";
+import RenderSurfaceSurah from "@/src/components/render-surface-surah";
+import RenderPortalSurah from "@/src/components/render-portal-surah";
 
 export const soundSurat = Audio.Sound;
 
@@ -118,43 +121,12 @@ const SuratDetail = () => {
   }
   return (
     <>
-      <Portal>
-        <Modal visible={isLoading}>
-          <View>
-            <ActivityIndicator size={50} />
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: 28,
-                fontWeight: "bold",
-                marginTop: 10,
-              }}
-            >
-              Please wait...
-            </Text>
-          </View>
-        </Modal>
-        <Dialog
-          visible={isDialogBackShown}
-          onDismiss={() => setIsDialogBackShown(false)}
-        >
-          <Dialog.Title>Ingin simpan?</Dialog.Title>
-          <Dialog.Content>
-            <Text>Kamu ingin simpan kondisi sekarang?</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button
-              onPress={() => {
-                setIsDialogBackShown(false);
-                router.back();
-              }}
-            >
-              No
-            </Button>
-            <Button onPress={handleSaveConditionScroll}>Yes</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <RenderPortalSurah
+        isLoading={isLoading}
+        handleSaveConditionScroll={handleSaveConditionScroll}
+        isDialogBackShown={isDialogBackShown}
+        setIsDialogBackShown={setIsDialogBackShown}
+      />
       <Appbar.Header
         style={{
           backgroundColor: colors.elevation.level4,
@@ -164,7 +136,7 @@ const SuratDetail = () => {
         <Appbar.Content
           title={`Surat ${surat.namaLatin}`}
           titleStyle={{
-            fontWeight: "700",
+            fontFamily: "Poppins_Bold",
             fontSize: 28,
           }}
         />
@@ -208,72 +180,7 @@ const SuratDetail = () => {
               if (item.nomorAyat === 1) {
                 return (
                   <>
-                    <View
-                      style={{
-                        alignItems: "center",
-                        marginTop: 10,
-                        marginHorizontal: 40,
-                        marginBottom: 20,
-                      }}
-                    >
-                      <Surface
-                        elevation={4}
-                        style={{
-                          height: 200,
-                          padding: 10,
-                          width: "100%",
-                          borderRadius: 20,
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Text
-                          style={{
-                            textAlign: "center",
-                            fontWeight: "800",
-                            fontSize: 28,
-                          }}
-                        >
-                          {surat.namaLatin}
-                        </Text>
-                        <Text
-                          style={{
-                            color: "gray",
-                          }}
-                        >
-                          {surat.jumlahAyat} Ayat
-                        </Text>
-                        <Text
-                          style={{
-                            textAlign: "center",
-                            fontWeight: 600,
-                            fontSize: 26,
-                            fontFamily: "Amiri_Regular",
-                          }}
-                        >
-                          {surat.nama}
-                        </Text>
-                        <View
-                          style={{
-                            height: 3,
-                            width: 50,
-                            backgroundColor: "white",
-                            marginTop: 8,
-                            marginBottom: 8,
-                          }}
-                        ></View>
-                        <Text
-                          style={{
-                            textAlign: "center",
-                            fontWeight: 600,
-                            fontSize: 26,
-                            fontFamily: "Amiri_Regular",
-                          }}
-                        >
-                          بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
-                        </Text>
-                      </Surface>
-                    </View>
+                    <RenderSurfaceSurah surat={surat} />
                     <RenderItemSurat item={item} />
                   </>
                 );
@@ -287,38 +194,4 @@ const SuratDetail = () => {
   );
 };
 
-type RenderLoadingType = {
-  title?: string;
-};
-
-export const RenderLoading: FC<RenderLoadingType> = ({ title = "Quran" }) => {
-  const { colors } = useTheme();
-  return (
-    <>
-      <Appbar.Header
-        style={{
-          backgroundColor: colors.elevation.level4,
-        }}
-      >
-        <Appbar.Content
-          title={title}
-          titleStyle={{
-            fontWeight: "700",
-            fontSize: 28,
-          }}
-        />
-      </Appbar.Header>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.background,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ActivityIndicator animating size={60} />
-      </View>
-    </>
-  );
-};
 export default SuratDetail;

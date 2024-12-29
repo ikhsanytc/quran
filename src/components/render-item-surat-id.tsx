@@ -113,7 +113,7 @@ const RenderItemSurat: FC<RenderItemSuratProps> = ({
                 style={{
                   textAlign: "center",
                   marginVertical: "auto",
-                  fontWeight: "800",
+                  fontFamily: "Poppins_Bold",
                   fontSize: 18,
                   color: "white",
                 }}
@@ -129,7 +129,7 @@ const RenderItemSurat: FC<RenderItemSuratProps> = ({
                 style={{
                   textAlign: "center",
                   marginVertical: "auto",
-                  fontWeight: "800",
+                  fontFamily: "Poppins_Bold",
                   fontSize: 18,
                 }}
               >
@@ -143,8 +143,9 @@ const RenderItemSurat: FC<RenderItemSuratProps> = ({
             <Text
               style={{
                 fontSize: 20,
-                fontWeight: "700",
+
                 marginBottom: 5,
+                fontFamily: "Poppins_Regular",
               }}
             >
               {item.teksLatin}
@@ -153,7 +154,7 @@ const RenderItemSurat: FC<RenderItemSuratProps> = ({
               style={{
                 fontSize: 17,
                 color: "gray",
-                fontWeight: "600",
+                fontFamily: "Poppins_Regular",
               }}
             >
               {item.teksIndonesia}

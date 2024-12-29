@@ -13,7 +13,7 @@ import RenderDropdownMenu from "../../components/render-dropdown-home";
 import RenderListHome from "@/src/components/render-list-home";
 import { handleOnScrollYFAB } from "@/src/lib/utils";
 
-const Home = memo(() => {
+const Home = () => {
   const { colors } = useTheme();
   const [quran] = useState(data);
   const FlashListRef = useRef<FlashList<isiQuranType>>(null);
@@ -34,7 +34,7 @@ const Home = memo(() => {
         <Appbar.Content
           title="Quran"
           titleStyle={{
-            fontWeight: "700",
+            fontFamily: "Poppins_Bold",
             fontSize: 28,
           }}
         />
@@ -72,6 +72,6 @@ const Home = memo(() => {
       </View>
     </>
   );
-});
+};
 
 export default Home;

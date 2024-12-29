@@ -12,7 +12,7 @@ import dataAsmaul from "../../data/dataAsmaulHusna.json";
 import { FlashList } from "@shopify/flash-list";
 import { useFonts } from "expo-font";
 import { Amiri_400Regular, Amiri_700Bold } from "@expo-google-fonts/amiri";
-import { RenderLoading } from "../surat/[id]";
+import { RenderLoading } from "../../components/render-loading-global";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -20,6 +20,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { AsmaulHusnaType } from "@/src/types/asmaul-husna";
 import { handleOnScrollYFAB } from "@/src/lib/utils";
+import RenderFlashlistAsmaul from "@/src/components/render-flashlist-asmaul";
 
 const AsmaulHusna = memo(() => {
   const { colors } = useTheme();
@@ -50,7 +51,7 @@ const AsmaulHusna = memo(() => {
         <Appbar.Content
           title="Asmaul Husna"
           titleStyle={{
-            fontWeight: "700",
+            fontFamily: "Poppins_Bold",
             fontSize: 28,
           }}
         />
@@ -62,92 +63,11 @@ const AsmaulHusna = memo(() => {
           paddingHorizontal: 10,
         }}
       >
-        <FlashList
-          data={asmaulHusna}
-          estimatedItemSize={100}
-          ListEmptyComponent={() => <ActivityIndicator />}
-          keyExtractor={(item) => item.urutan.toString()}
-          removeClippedSubviews={true}
-          ref={FlashListRef}
-          onScroll={(e) => handleOnScrollYFAB(e, translateYFAB)}
-          contentContainerStyle={{
-            paddingBottom: 10,
-          }}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                marginBottom: 30,
-              }}
-            ></View>
-          )}
-          renderItem={({ item }) => (
-            <List.Item
-              descriptionStyle={{
-                marginBottom: 40,
-              }}
-              title={
-                <Text
-                  style={{
-                    textAlign: "right",
-                    fontSize: 28,
-                    fontFamily: "Amiri_Regular",
-                    fontWeight: "600",
-                    lineHeight: 75,
-                  }}
-                >
-                  {item.arab}
-                </Text>
-              }
-              titleStyle={{
-                marginBottom: 10,
-              }}
-              titleNumberOfLines={0}
-              left={() => (
-                <View
-                  style={{
-                    marginLeft: 10,
-                    width: 30,
-                    height: 30,
-                    backgroundColor: colors.primary,
-                    borderRadius: 100,
-                  }}
-                >
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      marginVertical: "auto",
-                      fontWeight: "800",
-                      fontSize: 18,
-                    }}
-                  >
-                    {item.urutan}
-                  </Text>
-                </View>
-              )}
-              description={
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "700",
-                      marginBottom: 5,
-                    }}
-                  >
-                    {item.latin}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      color: "gray",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {item.arti}
-                  </Text>
-                </View>
-              }
-            />
-          )}
+        <RenderFlashlistAsmaul
+          asmaulHusna={asmaulHusna}
+          FlashListRef={FlashListRef}
+          translateYFAB={translateYFAB}
+          handleOnScrollYFAB={handleOnScrollYFAB}
         />
         <AnimatedFAB
           icon="arrow-up"

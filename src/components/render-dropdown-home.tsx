@@ -20,6 +20,9 @@ export default function RenderDropdownMenu() {
       >
         <Menu.Item
           title="About me"
+          titleStyle={{
+            fontFamily: "Poppins_Bold",
+          }}
           onPress={() => {
             setVisibleDialog(true);
             setVisible(false);
@@ -31,15 +34,32 @@ export default function RenderDropdownMenu() {
           visible={visibleDialog}
           onDismiss={() => setVisibleDialog(false)}
         >
-          <Dialog.Title>About me</Dialog.Title>
+          <Dialog.Title
+            style={{
+              fontFamily: "Poppins_Bold",
+            }}
+          >
+            About me
+          </Dialog.Title>
           <Dialog.Content>
-            <Text>
+            <Text
+              style={{
+                fontFamily: "Poppins_Regular",
+              }}
+            >
               "Saya adalah seorang programmer yg hobi buat aplikasi dan web"
               -ikhsan
             </Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setVisibleDialog(false)}>Oke</Button>
+            <Button
+              onPress={() => setVisibleDialog(false)}
+              labelStyle={{
+                fontFamily: "Poppins_Bold",
+              }}
+            >
+              Oke
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

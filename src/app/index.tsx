@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BottomNavigation, useTheme } from "react-native-paper";
+import { BottomNavigation, Text, useTheme } from "react-native-paper";
 import Home from "./pages/home";
 import AsmaulHusna from "./pages/asmaul-husna";
 
@@ -30,6 +30,18 @@ export default function Index() {
       onIndexChange={setIndex}
       renderScene={renderScene}
       sceneAnimationEnabled={true}
+      sceneAnimationType="shifting"
+      renderLabel={({ route: { title } }) => (
+        <Text
+          style={{
+            textAlign: "center",
+            fontFamily: "Poppins_Bold",
+            fontSize: 12,
+          }}
+        >
+          {title}
+        </Text>
+      )}
       activeIndicatorStyle={{
         backgroundColor: colors.primaryContainer,
       }}
