@@ -1,19 +1,7 @@
-import { BackHandler, ScrollView, View } from "react-native";
-import React, { FC, memo, useEffect, useRef, useState } from "react";
+import { BackHandler, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import {
-  ActivityIndicator,
-  Appbar,
-  Button,
-  Dialog,
-  Divider,
-  List,
-  Modal,
-  Portal,
-  Surface,
-  Text,
-  useTheme,
-} from "react-native-paper";
+import { Appbar, Text, useTheme } from "react-native-paper";
 import { Ayat, SuratData } from "@/src/types/surat";
 import { useFonts } from "expo-font";
 import { Amiri_400Regular, Amiri_700Bold } from "@expo-google-fonts/amiri";

@@ -1,13 +1,6 @@
-import { NativeScrollEvent, NativeSyntheticEvent, View } from "react-native";
+import { View } from "react-native";
 import React, { memo, useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Text,
-  Appbar,
-  List,
-  useTheme,
-  FAB,
-} from "react-native-paper";
+import { Appbar, useTheme, FAB } from "react-native-paper";
 import dataAsmaul from "../../data/dataAsmaulHusna.json";
 import { FlashList } from "@shopify/flash-list";
 import { useFonts } from "expo-font";
@@ -16,7 +9,6 @@ import { RenderLoading } from "../../components/render-loading-global";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
 } from "react-native-reanimated";
 import { AsmaulHusnaType } from "@/src/types/asmaul-husna";
 import { handleOnScrollYFAB } from "@/src/lib/utils";

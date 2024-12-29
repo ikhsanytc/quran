@@ -1,5 +1,5 @@
-import React, { memo, useRef, useState } from "react";
-import { NativeScrollEvent, NativeSyntheticEvent, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { View } from "react-native";
 import { Appbar, FAB, useTheme } from "react-native-paper";
 import { data } from "@/src/data/dataQuran.json";
 import { FlashList } from "@shopify/flash-list";
@@ -7,7 +7,6 @@ import { isiQuranType } from "../../types/quran";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
 } from "react-native-reanimated";
 import RenderDropdownMenu from "../../components/render-dropdown-home";
 import RenderListHome from "@/src/components/render-list-home";

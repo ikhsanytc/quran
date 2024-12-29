@@ -1,14 +1,8 @@
 import { FlashList } from "@shopify/flash-list";
 import { isiQuranType } from "../types/quran";
-import {
-  FlatList,
-  Keyboard,
-  LayoutChangeEvent,
-  NativeSyntheticEvent,
-  View,
-} from "react-native";
+import { NativeSyntheticEvent, View } from "react-native";
 import { NativeScrollEvent } from "react-native";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Divider, List, Text, useTheme } from "react-native-paper";
 import { removeHtmlTags } from "../lib/utils";
 import { router } from "expo-router";

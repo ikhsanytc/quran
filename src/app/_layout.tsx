@@ -11,12 +11,7 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  useColorScheme,
-} from "react-native";
+import { KeyboardAvoidingView, Text, useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import * as SystemUI from "expo-system-ui";
@@ -24,13 +19,8 @@ import Toast from "react-native-toast-message";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   useFonts,
-  Poppins_100Thin,
-  Poppins_300Light,
   Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_600SemiBold,
   Poppins_700Bold,
-  Poppins_800ExtraBold,
 } from "@expo-google-fonts/poppins";
 import * as SplashScreen from "expo-splash-screen";
 import { View } from "react-native";

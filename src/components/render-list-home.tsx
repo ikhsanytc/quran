@@ -6,11 +6,6 @@ import { Divider, List, Searchbar, Text, useTheme } from "react-native-paper";
 import { router } from "expo-router";
 import { removeHtmlTags } from "../lib/utils";
 import { View } from "react-native";
-import { useFonts } from "expo-font";
-import {
-  Poppins_400Regular,
-  Poppins_700Bold,
-} from "@expo-google-fonts/poppins";
 
 type RenderListHomeProps = {
   quran: isiQuranType[];
@@ -23,7 +18,6 @@ const RenderListHome: FC<RenderListHomeProps> = ({
   FlashListRef,
   handleOnScroll,
 }) => {
-  const { colors } = useTheme();
   return (
     <FlashList
       data={quran}

@@ -1,32 +1,14 @@
-import {
-  FlatList,
-  Keyboard,
-  KeyboardAvoidingView,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  Platform,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import React, { FC, useEffect, useRef, useState } from "react";
-import {
-  Appbar,
-  Divider,
-  List,
-  Searchbar,
-  useTheme,
-  Text,
-  FAB,
-} from "react-native-paper";
+import { View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Appbar, Searchbar, useTheme, FAB } from "react-native-paper";
 import { router } from "expo-router";
-import { handleOnScrollYFAB, removeHtmlTags } from "@/src/lib/utils";
+import { handleOnScrollYFAB } from "@/src/lib/utils";
 import { FlashList } from "@shopify/flash-list";
 import { data } from "@/src/data/dataQuran.json";
 import { isiQuranType } from "@/src/types/quran";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
 } from "react-native-reanimated";
 import RenderListSearch from "@/src/components/render-list-search";
 
